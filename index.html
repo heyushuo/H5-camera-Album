@@ -11,28 +11,20 @@
     </script>
 </head>
 <body>
-	<h2 class="title-detail">  
-                    图片描述  
-                </h2>  
-                <input type="hidden" id="picIndex" value="0">  
-                <div id='image-list' class="row image-list">  
-                    <!-- <input id="upload_image" type="file" name="image" accept="image/*" /> -->  
-                     <div class="image-item space" id="btn" onclick="showActionSheet()">  
-                     	点击这里
-                        <div class="image-up"></div>  
-                        <img src="" id="img" />
-                    </div>  
-                </div>  
-                <input type="button" name="sendBtn" id="sendBtn" value="提交请求" />
+	<div style="text-align: center;">
+	    <div id='image-list' class="row image-list">  
+	        <!-- <input id="upload_image" type="file" name="image" accept="image/*" /> -->  
+	         <div class="image-item space" id="btn" style="margin-top: 50px;">  
+	         	<input type="button" name="" id="" value="点击这里调手机底层本地选择或者拍照" />
+	        </div>  
+	    </div>  
+	    <input type="button" style="margin-top: 20px;" name="sendBtn" id="sendBtn" value="提交请求" />
+    </div>
 </body>
 </html>
 <script src="js/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-//	var btn1=document.getElementById("btn");
-//	btn1.onchange=function(){
-//		console.log(this.files[0].size)
-//	};
-
+//把base64转为二进制
 function getBlob(buffer, format) {
   try {
     return new Blob(buffer, {type: format});
@@ -44,110 +36,120 @@ function getBlob(buffer, format) {
     return bb.getBlob(format);
   }
 }
-	window.onload=function(){
+window.onload=function(){
 		var fd=null;
 		mui.plusReady(function(){
 		//图片显示  并转化为二进制
-       function showPics(url,name){          
-         //根据路径读取到文件   
-           plus.io.resolveLocalFileSystemURL(url,function(entry){  
-               entry.file( function(file){  
-                   var fileReader = new plus.io.FileReader();  
-                   fileReader.readAsDataURL(file);  
-                   fileReader.onloadend = function(e) {
-                           var picUrl = e.target.result.toString(); 
-                           
-                          	$("#img").attr("src",picUrl)
-                          		var arr = picUrl.split(',');
-					    	   var type = arr[0].match(/:(.*?);/)[1];//获得图片的类型
-					////////////////---把base64转化为二进制----//////////////////
-					    		var text = window.atob(picUrl.split(",")[1]);
-							    var buffer = new Uint8Array(text.length);
-							   
-							    var pecent = 0, loop = null;
-							    for (var i = 0; i < text.length; i++) {
-							      buffer[i] = text.charCodeAt(i);
-							    }
-							    var blob = getBlob([buffer], type);
-							    console.log(blob.size/1024+"kb");
-							    fd = new FormData();//上边是FormData的介绍
-		   						fd.append('photoupload',blob);
-		   						console.log(fd)
-		   						//fd里存有图片的二进制
-                        }  
-               });  
-          });   
-       }  
-        //压缩图片    
-       function compressImage(url,filename){    
-           var name="_doc/upload/"+filename;  
-           plus.zip.compressImage({    
-                   src:url,//src: (String 类型 )压缩转换原始图片的路径    
-                   dst:name,//压缩转换目标图片的路径    
-                   quality:100,//quality: (Number 类型 )压缩图片的质量.取值范围为1-100    
-                   overwrite:true,//overwrite: (Boolean 类型 )覆盖生成新文件    
-                   width:"200px",
-                   height:"250px"
-               },    
-               function(zip) {  
-                   //页面显示图片  
-                   showPics(zip.target,name);  
-               },function(error) {    
-                   plus.nativeUI.toast("压缩图片失败，请稍候再试");    
-           });    
-       }   
-        
-        //调用手机摄像头并拍照  
-       function getImage() {    
-           var cmr = plus.camera.getCamera();    
-           cmr.captureImage(function(p) {    
-               plus.io.resolveLocalFileSystemURL(p, function(entry) {    
-                   compressImage(entry.toLocalURL(),entry.name);    
-               }, function(e) {    
-                   plus.nativeUI.toast("读取拍照文件错误：" + e.message);    
-               });    
-           }, function(e) {    
-           }, {    
-               filter: 'image'   
-           });    
-       }  
-       //从相册选择照片  
-       function galleryImgs() {    
-            plus.gallery.pick(function(e) {    
-                var name = e.substr(e.lastIndexOf('/') + 1);  
-               compressImage(e,name);  
-            }, function(e) {    
-            }, {    
-                filter: "image"    
-            });    
-        }  
-         
-       //点击事件，弹出选择摄像头和相册的选项  
-//      function showActionSheet() {   
-	var btn=document.getElementById("btn");
-	btn.onclick=function(){
-		 var bts = [{    
-                title: "拍照"    
-            }, {    
-                title: "从相册选择"    
-            }];    
-            plus.nativeUI.actionSheet({    
-                    cancel: "取消",    
-                    buttons: bts    
-                },    
-                function(e) {    
-                    if (e.index == 1) {    
-                        getImage();    
-                    } else if (e.index == 2) {    
-                        galleryImgs();    
-                    }    
-                }    
-            ); 
-	}
-              
-//      } 
-	})
-		
-		$("#")
+		       function showPics(url,name){          
+		         //根据路径读取到文件   
+		           plus.io.resolveLocalFileSystemURL(url,function(entry){  
+		               entry.file( function(file){  
+		                   var fileReader = new plus.io.FileReader();  
+		                   fileReader.readAsDataURL(file);  
+		                   fileReader.onloadend = function(e) {
+		                           var picUrl = e.target.result.toString(); 
+		                           
+		                          	$("#img").attr("src",picUrl)
+		                          		var arr = picUrl.split(',');
+							    	   var type = arr[0].match(/:(.*?);/)[1];//获得图片的类型
+							////////////////---把base64转化为二进制----//////////////////
+							    		var text = window.atob(picUrl.split(",")[1]);
+									    var buffer = new Uint8Array(text.length);
+									   
+									    var pecent = 0, loop = null;
+									    for (var i = 0; i < text.length; i++) {
+									      buffer[i] = text.charCodeAt(i);
+									    }
+									    var blob = getBlob([buffer], type);
+									    console.log(blob.size/1024+"kb");
+									    fd = new FormData();//上边是FormData的介绍
+				   						fd.append('photoupload',blob);
+				   						console.log(fd)
+				   						//fd里存有图片的二进制
+		                        }  
+		               });  
+		          });   
+		       }  
+		        //压缩图片    
+		       function compressImage(url,filename){    
+		           var name="_doc/upload/"+filename;  
+		           plus.zip.compressImage({    
+		                   src:url,//src: (String 类型 )压缩转换原始图片的路径    
+		                   dst:name,//压缩转换目标图片的路径    
+		                   quality:100,//quality: (Number 类型 )压缩图片的质量.取值范围为1-100    
+		                   overwrite:true,//overwrite: (Boolean 类型 )覆盖生成新文件    
+		                   width:"200px",
+		                   height:"250px"
+		               },    
+		               function(zip) {  
+		                   //页面显示图片  
+		                   showPics(zip.target,name);  
+		               },function(error) {    
+		                   plus.nativeUI.toast("压缩图片失败，请稍候再试");    
+		           });    
+		       }   
+		        
+		        //调用手机摄像头并拍照  
+		       function getImage() {    
+		           var cmr = plus.camera.getCamera();    
+		           cmr.captureImage(function(p) {    
+		               plus.io.resolveLocalFileSystemURL(p, function(entry) {    
+		                   compressImage(entry.toLocalURL(),entry.name);    
+		               }, function(e) {    
+		                   plus.nativeUI.toast("读取拍照文件错误：" + e.message);    
+		               });    
+		           }, function(e) {    
+		           }, {    
+		               filter: 'image'   
+		           });    
+		       }  
+		       //从相册选择照片  
+		       function galleryImgs() {    
+		            plus.gallery.pick(function(e) {    
+		                var name = e.substr(e.lastIndexOf('/') + 1);  
+		               compressImage(e,name);  
+		            }, function(e) {    
+		            }, {    
+		                filter: "image"    
+		            });    
+		        }  
+		         
+		    //点击事件，弹出选择摄像头和相册的选项  
+			var btn=document.getElementById("btn");
+			btn.onclick=function(){
+				 var bts = [{    
+			                title: "拍照"    
+			            }, {    
+			                title: "从相册选择"    
+			            }];    
+			            plus.nativeUI.actionSheet({    
+			                    cancel: "取消",    
+			                    buttons: bts    
+			                },    
+			                function(e) {    
+			                    if (e.index == 1) {    
+			                        getImage();    
+			                    } else if (e.index == 2) {    
+			                        galleryImgs();    
+			                    }    
+			                }    
+			            ); 
+				}
+			})
+				
+				$("#sendBtn").click(function(){
+					$.ajax({
+						   type: "POST",
+						   url:"",
+						   dataType:'json',
+						   data: fd,
+						   success:function(data){
+						   	console.log(data)
+						   }, 
+							error:function(){ //上传失败 
+							  	alert("error")
+							}
+					}); 
+				})
 }
 </script>
