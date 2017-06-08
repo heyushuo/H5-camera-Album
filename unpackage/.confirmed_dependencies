@@ -1,0 +1,9 @@
+{
+	"index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/jquery-1.7.2.min.js"
+		]
+	}
+}
